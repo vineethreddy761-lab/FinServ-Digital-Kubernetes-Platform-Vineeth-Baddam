@@ -1,0 +1,23 @@
+apiVersion: config.linkerd.io/v1alpha1
+kind: Mesh
+metadata:
+  name: default
+  namespace: linkerd
+spec:
+  proxy:
+    await: true
+    controlPlaneLog: info
+    transport:
+      privateNetwork: true
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: ServerAuthorization
+metadata:
+  name: require-mtls-payments
+  namespace: production-payments
+spec:
+  server:
+    port: https
+  client:
+    meshTLS:
+      unauthenticated: false
