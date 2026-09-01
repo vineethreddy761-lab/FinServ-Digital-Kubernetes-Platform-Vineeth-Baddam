@@ -1,0 +1,21 @@
+# FinServ Digital: Restricted Pod Security Context Template
+# Enforces non-root execution, read-only root filesystem, and dropped capabilities.
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-template
+spec:
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 10001
+    fsGroup: 10001
+    seccompProfile:
+      type: RuntimeDefault
+  containers:
+  - name: application-container
+    securityContext:
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      capabilities:
+        drop:
+        - ALL
