@@ -1,0 +1,7 @@
+{
+  "project_name": "FinServ Digital Security-Hardened Kubernetes Platform",
+  "project_number": 493557,
+  "intern_name": "Vineeth Reddy Baddam",
+  "target_compliance": ["RBI IT Framework", "PCI-DSS Level 1"],
+  "scope": "Migration of 20 microservices serving 2.4 million users across 4 domain-separated namespaces"
+}
