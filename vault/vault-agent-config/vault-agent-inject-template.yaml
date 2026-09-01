@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-gateway
+  namespace: production-payments
+spec:
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/role: "payments-service-role"
+        vault.hashicorp.com/agent-inject-secret-db-credentials.txt: "secret/data/production/payments/db"
+    spec:
+      serviceAccountName: payments-sa
+      containers:
+      - name: payment-gateway
+        image: registry.finserv.internal:5000/payments/gateway:v1.2.0
