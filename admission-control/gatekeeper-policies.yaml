@@ -1,0 +1,31 @@
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: K8sRestrictedImageRegistry
+metadata:
+  name: block-untrusted-registries
+spec:
+  match:
+    kinds:
+    - apiGroups: ["apps"]
+      kinds: ["Deployment"]
+    excludedNamespaces: ["kube-system", "monitoring", "security-tools"]
+  parameters:
+    allowedRegistries:
+    - "registry.finserv.internal:5000/"
+---
+apiVersion: templates.gatekeeper.sh/v1beta1
+kind: ConstraintTemplate
+metadata:
+  name: k8srequiredimagesignature
+spec:
+  crd:
+    spec:
+      names:
+        kind: K8sRequiredImageSignature
+  targets:
+  - target: admission.k8s.gatekeeper.sh
+    rego: |
+      package k8srequiredimagesignature
+      violation[{"msg": msg}] {
+        not input.review.object.metadata.annotations["finserv.io/image-signed"]
+        msg := "Container image must be cryptographically signed by Cosign prior to deployment."
+      }
